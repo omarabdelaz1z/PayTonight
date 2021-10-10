@@ -4,7 +4,6 @@
   "description": "Graduation project for Sprints backend bootcamp",
   "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/server.js",
     "lint": "eslint --ext .js ./ --config .eslintrc.js --fix"
   },
