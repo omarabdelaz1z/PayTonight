@@ -18,34 +18,14 @@ npm install
 |   server.js
 |
 +---public
-|   |   index.html
-|   |
 |   +---about
-|   |       index.html
-|   |
 |   +---login
-|   |       index.html
-|   |
 |   \---register
-|           index.html
 |
 \---src
     +---controllers
-    |       transaction.controller.js
-    |       user.controller.js
-    |
     +---middlewares
-    |       auth.js
-    |
     +---models
-    |       Transaction.js
-    |       User.js
-    |
     +---routes
-    |       transcation.router.js
-    |       user.router.js
-    |
     \---utils
-            db.js
-            middleware.js
 ```
