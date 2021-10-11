@@ -7,5 +7,9 @@ module.exports = {
   },
   plugins: ["prettier"],
   extends: ["airbnb-base", "prettier"],
-  rules: {},
+  rules: {
+    "no-console": 0,
+    "no-unused-vars": 1,
+    "no-useless-catch": 1,
+  },
 };

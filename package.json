@@ -1,10 +1,10 @@
 {
-  "name": "fintech-project",
+  "name": "paytonight",
   "version": "1.0.0",
   "description": "Graduation project for Sprints backend bootcamp",
-  "main": "src/server.js",
+  "main": "server.js",
   "scripts": {
-    "dev": "nodemon src/server.js",
+    "dev": "nodemon server.js",
     "lint": "eslint --ext .js ./ --config .eslintrc.js --fix"
   },
   "repository": {
@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/omarabdelaz1z/FinTech-Project#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "mongoose": "^6.0.10"
