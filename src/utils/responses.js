@@ -30,4 +30,11 @@ module.exports = {
       error: error || ReasonPhrases.INTERNAL_SERVER_ERROR,
       code: "INTERNAL_SERVER_ERROR",
     }),
+
+  UNSUPPORTED_MEDIA_TYPE: (res, error) => {
+    res.status(StatusCodes.UNSUPPORTED_MEDIA_TYPE).json({
+      error: error || ReasonPhrases.UNSUPPORTED_MEDIA_TYPE,
+      code: "UNSUPPORTED_MEDIA_TYPE",
+    });
+  },
 };
