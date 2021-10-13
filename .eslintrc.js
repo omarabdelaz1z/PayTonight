@@ -5,6 +5,17 @@ module.exports = {
     es2021: true,
     node: true,
   },
+  parser: "@babel/eslint-parser",
+  parserOptions: {
+    sourceType: "module",
+    allowImportExportEverywhere: false,
+    ecmaFeatures: {
+      globalReturn: false,
+    },
+    babelOptions: {
+      configFile: "./babel.config.js",
+    },
+  },
   plugins: ["prettier"],
   extends: ["airbnb-base", "prettier"],
   rules: {
