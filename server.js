@@ -1,14 +1,13 @@
 require("dotenv").config();
 const express = require("express");
 const middleware = require("./src/utils/middleware");
+const authRouter = require("./src/routes/auth.router");
 
 const app = express();
 
 middleware(app);
 
-// mount routes here
-// note: resource name is plural
-// app.use("/resource", resourceRouter)
+app.use("/auth", authRouter);
 
 app.get("/", (req, res) => res.render("index.html"));
 

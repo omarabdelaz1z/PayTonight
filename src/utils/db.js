@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { ServerError } = require("./error-handler");
 
 let cachedClient = null;
 
@@ -15,7 +16,7 @@ async function connect() {
     cachedClient = client;
     return cachedClient;
   } catch (error) {
-    throw error;
+    throw new ServerError("Failed to connect to server");
   }
 }
 
