@@ -2,12 +2,14 @@ require("dotenv").config();
 const express = require("express");
 const middleware = require("./src/utils/middleware");
 const authRouter = require("./src/routes/auth.router");
+const devRouter = require("./src/routes/dev.router");
 
 const app = express();
 
 middleware(app);
 
 app.use("/auth", authRouter);
+app.use("/dev",devRouter);
 
 app.get("/", (req, res) => res.render("index.html"));
 
