@@ -22,6 +22,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "organization is required"],
     },
+    apps: [
+        {
+          name:String,
+          iv:String,
+          timestamp:String,
+          passphrase:String
+        }
+      ],
   },
   {
     toJSON: {
@@ -56,5 +64,8 @@ const createUser = async (body) => {
   await connect();
   return User.create(body);
 };
-
-module.exports = { findUser, createUser };
+const createApp = async (filter,appDetails) => {
+    await connect();
+    return User.findOneAndUpdate(filter,appDetails, {new: true});
+};
+module.exports = { findUser, createUser, createApp };

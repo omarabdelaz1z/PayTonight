@@ -28,7 +28,8 @@
     "express": "^4.17.1",
     "http-status-codes": "^2.1.4",
     "mongoose": "^6.0.10",
-    "pre-commit": "^1.2.2"
+    "pre-commit": "^1.2.2",
+    "secret-key": "^1.5.1"
   },
   "pre-commit": [
     "lint"
