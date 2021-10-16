@@ -1,13 +1,23 @@
 const { Router } = require("express");
 const {
   createTransaction,
-  deleteTransaction,
+  deleteTransactionById,
+  updateTransactionById,
+  getTransactionById,
 } = require("../controllers/transaction.controller");
 
 const router = Router();
 
 // TODO: prepare routes
-router.post("/create", createTransaction);
-router.post("/get", deleteTransaction);
+router
+  .route("/:id")
+  .get(getTransactionById)
+  .put(updateTransactionById)
+  .delete(deleteTransactionById);
+
+// method-override is needed to use PUT and DELETE
+// https://www.npmjs.com/package/method-override
+
+router.post("/", createTransaction);
 
 module.exports = router;

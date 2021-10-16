@@ -24,10 +24,18 @@
   "homepage": "https://github.com/omarabdelaz1z/FinTech-Project#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "client-sessions": "^0.8.0",
+    "csurf": "^1.11.0",
     "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
     "express": "^4.17.1",
+    "express-flash": "0.0.2",
+    "express-session": "^1.17.2",
+    "helmet": "^4.6.0",
     "http-status-codes": "^2.1.4",
     "mongoose": "^6.0.10",
+    "passport": "^0.5.0",
+    "passport-local": "^1.0.0",
     "pre-commit": "^1.2.2"
   },
   "pre-commit": [

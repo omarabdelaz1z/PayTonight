@@ -1,30 +1,29 @@
 const bcrypt = require("bcrypt");
+const passport = require("passport");
 const { StatusCodes } = require("http-status-codes");
-const { findUser, createUser } = require("../models/User");
+const { createUser } = require("../models/User");
 const { ServerError } = require("../utils/error-handler");
 const { prettifyMongooseError } = require("../utils/general");
-const { BAD_REQUEST, INTERNAL_SERVER_ERROR } = require("../utils/responses");
 
-function destructUser({ id, username, email, organization }) {
-  return { id, username, email, organization };
-}
+const login = (req, res, next) => {
+  passport.authenticate("local", (error, user, info) => {
+    if (error || !user) {
+      if (error instanceof ServerError) {
+        return res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .render("maintenance");
+      }
 
-const login = async (req, res) => {
-  try {
-    const user = await findUser({ username: req.body.username });
-    console.log(user);
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .render("login", { errorMessage: info });
+    }
 
-    const match = await bcrypt.compare(req?.body?.password, user?.password);
-
-    if (typeof user === "undefined" || !match)
-      return BAD_REQUEST(res, "Invalid username/ password");
-
-    return res.status(StatusCodes.OK).json(destructUser(user));
-  } catch (error) {
-    if (error instanceof ServerError) return INTERNAL_SERVER_ERROR(res);
-    console.log(error);
-    return res.send(error);
-  }
+    return req.logIn(user, (err) => {
+      if (err) next(err);
+      return res.redirect("/dashboard");
+    });
+  })(req, res, next);
 };
 
 const register = async (req, res) => {
@@ -32,21 +31,27 @@ const register = async (req, res) => {
     const hash = await bcrypt.hash(req.body.password, 14);
     req.body.password = hash;
 
-    const created = await createUser(req.body);
-    return res.status(StatusCodes.CREATED).json(created);
+    await createUser(req.body);
+    return res.status(StatusCodes.CREATED).redirect("/login");
   } catch (error) {
-    if (error instanceof ServerError) return INTERNAL_SERVER_ERROR(res);
+    if (error instanceof ServerError) return res.redirect("/maintenance");
 
     if (error?.errors)
       return res
         .status(StatusCodes.UNPROCESSABLE_ENTITY)
-        .json(prettifyMongooseError(error));
+        .render("register", { error: prettifyMongooseError(error) });
 
-    return res.status(StatusCodes.BAD_REQUEST).send(error);
+    return res.status(StatusCodes.BAD_REQUEST).render("register", { error });
   }
+};
+
+const logout = (req, res) => {
+  res.logOut();
+  res.redirect("/login");
 };
 
 module.exports = {
   login,
   register,
+  logout,
 };

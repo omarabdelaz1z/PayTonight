@@ -1,6 +1,12 @@
 const mongoose = require("mongoose");
 const connect = require("../utils/db");
 
+const options = {
+  toJSON: {
+    virtuals: true,
+  },
+};
+
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -23,11 +29,7 @@ const userSchema = new mongoose.Schema(
       required: [true, "organization is required"],
     },
   },
-  {
-    toJSON: {
-      virtuals: true,
-    },
-  }
+  options
 );
 
 userSchema.virtual("id").get(function getId() {
@@ -57,4 +59,9 @@ const createUser = async (body) => {
   return User.create(body);
 };
 
-module.exports = { findUser, createUser };
+const findUserById = async (id) => {
+  await connect();
+  return User.findById(id, "-__v");
+};
+
+module.exports = { findUser, createUser, findUserById };
