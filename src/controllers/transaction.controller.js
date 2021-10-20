@@ -1,9 +1,18 @@
-const User = require("../models/Transaction");
+const Transaction = require("../models/Transaction");
 
 // TODO: create necessary operations for Transaction
 
 const createTransaction = async (req, res) => {};
 
+const getTransaction = async (req, res) => {};
+
 const deleteTransaction = async (req, res) => {};
 
-module.exports = { createTransaction, deleteTransaction };
+const updateTransaction = async (req, res) => {};
+
+module.exports = {
+  createTransaction,
+  getTransaction,
+  deleteTransaction,
+  updateTransaction,
+};
