@@ -28,6 +28,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "organization is required"],
     },
+    apps: [
+      {
+        name: String,
+        iv: String,
+        timestamp: String,
+        passphrase: String,
+      },
+    ],
   },
   options
 );
@@ -64,4 +72,9 @@ const findUserById = async (id) => {
   return User.findById(id, "-__v");
 };
 
-module.exports = { findUser, createUser, findUserById };
+const createApp = async (filter, appDetails) => {
+  await connect();
+  return User.findOneAndUpdate(filter, appDetails, { new: true });
+};
+
+module.exports = { findUser, createUser, createApp, findUserById };

@@ -36,7 +36,8 @@
     "mongoose": "^6.0.10",
     "passport": "^0.5.0",
     "passport-local": "^1.0.0",
-    "pre-commit": "^1.2.2"
+    "pre-commit": "^1.2.2",
+    "secret-key": "^1.5.1"
   },
   "pre-commit": [
     "lint"
