@@ -2,14 +2,16 @@ const express = require("express");
 const session = require("express-session");
 const helmet = require("helmet");
 const passport = require("passport");
+const { requireJsonContent } = require("../middlewares/general");
 
 require("./passport");
-const { requireJsonContent } = require("../middlewares/general");
 
 // Shared middleware for all routes
 module.exports = (app) => {
+  app.use(express.static("public"));
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
+  app.use(requireJsonContent);
   app.use(helmet());
   app.use(
     session({
@@ -24,7 +26,4 @@ module.exports = (app) => {
   );
   app.use(passport.initialize());
   app.use(passport.session());
-  app.use(express.urlencoded({ extended: true }));
-  app.use(express.static("public"));
-  app.use(requireJsonContent);
 };

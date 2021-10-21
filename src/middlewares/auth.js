@@ -6,7 +6,7 @@ const loginRequired = (req, res, next) => {
 
 // Don't go back to login or register unless you are not logged in.
 const isAlreadyLoggedIn = (req, res, next) => {
-  if (req.isAuthenticated()) return res.redirect("/");
+  if (req.isAuthenticated()) return res.redirect("/dashboard");
   return next();
 };
 

@@ -4,6 +4,9 @@ const { StatusCodes } = require("http-status-codes");
 const { createUser } = require("../models/User");
 const { ServerError } = require("../utils/error-handler");
 const { prettifyMongooseError } = require("../utils/general");
+const { registerSchema } = require("../utils/joi/schemas");
+const { BAD_REQUEST } = require("../utils/responses");
+const { VALIDATE_OPTIONS } = require("../utils/joi/constants");
 
 const login = (req, res, next) => {
   passport.authenticate("local", (error, user, info) => {
@@ -15,8 +18,8 @@ const login = (req, res, next) => {
       }
 
       return res
-        .status(StatusCodes.UNAUTHORIZED)
-        .render("login", { errorMessage: info });
+        .status(StatusCodes.BAD_REQUEST)
+        .render("login", { errorMessage: info?.message || info });
     }
 
     return req.logIn(user, (err) => {
@@ -28,6 +31,11 @@ const login = (req, res, next) => {
 
 const register = async (req, res) => {
   try {
+    const validation = registerSchema.validate(req.body, VALIDATE_OPTIONS);
+
+    if (validation.error)
+      return BAD_REQUEST(res, validation.error.details[0].message);
+
     const hash = await bcrypt.hash(req.body.password, 14);
     req.body.password = hash;
 

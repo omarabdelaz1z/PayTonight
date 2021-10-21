@@ -33,10 +33,12 @@
     "express-session": "^1.17.2",
     "helmet": "^4.6.0",
     "http-status-codes": "^2.1.4",
+    "joi": "^17.4.2",
     "mongoose": "^6.0.10",
     "passport": "^0.5.0",
     "passport-local": "^1.0.0",
     "pre-commit": "^1.2.2",
+    "sanitize-html": "^2.5.2",
     "secret-key": "^1.5.1"
   },
   "pre-commit": [

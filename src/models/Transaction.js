@@ -5,6 +5,7 @@ const transactionSchema = new mongoose.Schema({});
 
 module.exports = mongoose.model("transactions", transactionSchema);
 
+/*
 const createTransaction = async (transaction) => {};
 
 const getTransactionById = async (id) => {};
@@ -19,3 +20,4 @@ module.exports = {
   updateTransactionById,
   deleteTransactionById,
 };
+*/
