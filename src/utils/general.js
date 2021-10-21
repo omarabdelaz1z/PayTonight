@@ -1,16 +1,10 @@
 const prettifyMongooseError = (error) => {
-  const errors = [];
-
+  const prettyError = {};
   // eslint-disable-next-line no-restricted-syntax
-  for (const [, detail] of Object.entries(error.errors)) {
-    errors.push({
-      type: detail.name,
-      attribute: detail.path,
-      message: detail.message,
-      value: detail.value,
-    });
-  }
-  return errors;
+  for (const [, detail] of Object.entries(error.errors))
+    prettyError[detail.path] = detail.message;
+
+  return prettyError;
 };
 
 module.exports = { prettifyMongooseError };

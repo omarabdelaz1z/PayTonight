@@ -3,8 +3,8 @@ require("dotenv").config();
 const express = require("express");
 const middleware = require("./src/utils/middleware");
 const authRouter = require("./src/routes/auth.router");
-const { loginRequired, isAlreadyLoggedIn } = require("./src/middlewares/auth");
 const devRouter = require("./src/routes/dev.router");
+const { loginRequired, isAlreadyLoggedIn } = require("./src/middlewares/auth");
 
 const app = express();
 

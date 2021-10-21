@@ -1,16 +1,22 @@
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
+const { loginSchema } = require("./joi/schemas");
 const { findUser, findUserById } = require("../models/User");
-
-const customFields = {
-  usernameField: "username",
-  passwordField: "password",
-};
+const { VALIDATE_OPTIONS } = require("./joi/constants");
 
 const login = async (username, password, done) => {
   try {
+    const validation = loginSchema.validate(
+      { username, password },
+      VALIDATE_OPTIONS
+    );
+
+    if (validation?.error)
+      return done(null, false, validation?.error.details[0].message);
+
     const user = await findUser({ username });
+
     if (!user) return done(null, false, "User not found");
 
     const match = await bcrypt.compare(password, user?.password);
@@ -22,7 +28,13 @@ const login = async (username, password, done) => {
   }
 };
 
-const strategy = new LocalStrategy(customFields, login);
+const strategy = new LocalStrategy(
+  {
+    usernameField: "username",
+    passwordField: "password",
+  },
+  login
+);
 
 passport.use(strategy);
 
