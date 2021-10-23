@@ -1,23 +1,64 @@
 const mongoose = require("mongoose");
+const connect = require("../utils/db");
+
 
 // TODO: defeine Transaction schema
-const transactionSchema = new mongoose.Schema({});
+const transactionSchema = new mongoose.Schema({
+  ccv: Number,
+  card_id: Number,
+  amount: Number,
+  user_id: mongoose.Schema.Types.ObjectId,
+  username: String,
+  created_at: String,
+  updated_at: String,
 
-module.exports = mongoose.model("transactions", transactionSchema);
+});
 
-/*
-const createTransaction = async (transaction) => {};
+const Transaction = mongoose.model("transactions", transactionSchema);
 
-const getTransactionById = async (id) => {};
+// eslint-disable-next-line import/prefer-default-export
+const createTransaction = async (transaction) => {
+  try {
+    await connect();
+    return (await Transaction.create(transaction));
+  } catch (e) {
+    return new Error(e);
+  }
+};
 
-const updateTransactionById = async (id, body) => {};
+// eslint-disable-next-line import/prefer-default-export
+const getTransactionsByUserID = async (id) => {
+  try {
+    await connect();
+    return(await Transaction.find({ user_id: new mongoose.mongo.ObjectId(id) }));
+  } catch (e) {
+    return ( new Error(e) );
+  }
+}
 
-const deleteTransactionById = async (id) => {};
+const getTransactionByID = async (id) => {
+  try {
+    await connect();
+    return (await Transaction.findById(id));
+  } catch (e) {
+    return new Error(e);
+  }
+}
+
+const deleteTransactionById = async (id) => {
+  try {
+    await connect();
+    return (await Transaction.deleteOne({ _id: id }));
+  } catch (e) {
+    return new Error(e);
+  }
+};
 
 module.exports = {
+  Transaction,
   createTransaction,
-  getTransactionById,
-  updateTransactionById,
+  getTransactionByID,
   deleteTransactionById,
+  getTransactionsByUserID,
 };
-*/
+
