@@ -45,11 +45,10 @@ class TransactionService {
         const merchant = await findUserById(new mongoose.mongo.ObjectId(transaction.user_id));
         if (merchant) {
             // const sendToBankResult = await this.sendTransactionToTheBank(transaction);
-            if (true) {
+            // if (true) {
                 // eslint-disable-next-line no-return-await
                 return (await this.saveTransactionIntoDatabase(transaction));
-            }
-            return false;
+           // }
         }
         return false;
     }
