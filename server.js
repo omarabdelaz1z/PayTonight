@@ -1,14 +1,15 @@
 require("dotenv").config();
 
 const express = require("express");
+const path = require("path");
 const middleware = require("./src/utils/middleware");
 const authRouter = require("./src/routes/auth.router");
 const devRouter = require("./src/routes/dev.router");
-const transactionsRouter = require('./src/routes/transcation.router');
+const transactionsRouter = require("./src/routes/transcation.router");
 const { loginRequired, isAlreadyLoggedIn } = require("./src/middlewares/auth");
 
 const app = express();
-
+app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
 
 middleware(app);

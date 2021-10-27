@@ -17,9 +17,9 @@ const login = (req, res, next) => {
           .render("maintenance");
       }
 
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .render("login", { errorMessage: info?.message || info });
+      return res.status(StatusCodes.BAD_REQUEST).render("index.ejs", {
+        signinError: info?.message || "Invalid username/password",
+      });
     }
 
     return req.logIn(user, (err) => {
@@ -42,14 +42,16 @@ const register = async (req, res) => {
     await createUser(req.body);
     return res.status(StatusCodes.CREATED).redirect("/login");
   } catch (error) {
-    if (error instanceof ServerError) return res.redirect("/maintenance");
+    if (error instanceof ServerError) return res.render("maintenance");
 
     if (error?.errors)
       return res
         .status(StatusCodes.UNPROCESSABLE_ENTITY)
-        .render("register", { error: prettifyMongooseError(error) });
+        .render("index.ejs", { signupError: prettifyMongooseError(error) });
 
-    return res.status(StatusCodes.BAD_REQUEST).render("register", { error });
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .render("register", { signupError: error });
   }
 };
 
