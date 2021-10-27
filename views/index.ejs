@@ -1,12 +1,255 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PayTonight</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Pay Tonight</title>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+    <link
+      href="/css/bootstrap-icons.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link href="/css/styles.css" rel="stylesheet" />
   </head>
   <body>
-    <h2>Welcome to PayTonight</h2>
+    <nav class="navbar navbar-light bg-light static-top">
+      <div class="container">
+        <a class="navbar-brand"
+          >Your e-commerce business is made easier by Pay Tonight!</a
+        >
+        <a class="btn btn-primary" href="#signup">Sign Up</a>
+      </div>
+    </nav>
+    <header class="masthead">
+      <div class="container position-relative">
+        <div class="row justify-content-center">
+          <div class="col-xl-6">
+            <div class="text-center text-white">
+              <h1 class="mb-5">Pay Tonight!</h1>
+              <form action="/auth/login" method="POST" class="container">
+                <div class="row">
+                  <div class="col">
+                    <div class="form-group>">
+                      <input
+                        class="form-control form-control-lg"
+                        name="username"
+                        type="text"
+                        placeholder="john.doe"
+                        required
+                      />
+                    </div>
+                    <div class="form-group>">
+                      <input
+                        class="form-control form-control-lg"
+                        name="password"
+                        type="password"
+                        placeholder="********"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <input
+                      type="submit"
+                      value="Sign In"
+                      class="btn btn-primary btn-lg"
+                    />
+                  </div>
+                  <div>
+                    <%= locals.signinError || "" %> 
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- Icons Grid-->
+    <section class="features-icons bg-light text-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="img-container">
+              <img
+                src="/assets/img/shopping.png"
+                type="image/x-icon"
+                alt="Happy Shopping"
+              />
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="img-container">
+              <img src="/assets/img/rich.png" alt="Happy Rich" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Image Showcases-->
+    <section class="showcase">
+      <div class="container-fluid p-0">
+        <div class="row g-0">
+          <div
+            class="col-lg-6 order-lg-2 text-white showcase-img"
+            style="background-image: url('/assets/img/secure-payment.png')"
+          ></div>
+          <div class="col-lg-6 order-lg-1 my-auto showcase-text">
+            <h2>Secure Payments</h2>
+            <b>Customers Satisfaction:</b>
+            <p class="lead mb-0">
+              Payments are made more secure by <b>Pay Tonight</b> payment
+              gateway. Customers can trust entering their Credit cards numbers
+              and happily Shopping!
+            </p>
+          </div>
+        </div>
+        <div class="row g-0">
+          <div
+            class="col-lg-6 text-white showcase-img"
+            style="background-image: url('/assets/img/dashboard-payments.png')"
+          ></div>
+          <div class="col-lg-6 my-auto showcase-text">
+            <h2>Payments Dashboards</h2>
+            <b>Merchant Satisfaction:</b>
+            <p class="lead mb-0">
+              Merchants are able to monitor their business through
+              <b>Pay Tonight!</b>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Testimonials-->
+    <section class="testimonials text-center bg-light">
+      <div class="container">
+        <h2 class="mb-5">What people are saying...</h2>
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+              <img
+                class="img-fluid rounded-circle mb-3"
+                src="/assets/img/testimonials-1.jpg"
+                alt="..."
+              />
+              <h5>Margaret E.</h5>
+              <p class="font-weight-light mb-0">
+                "This is fantastic! Thanks so much guys!"
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+              <img
+                class="img-fluid rounded-circle mb-3"
+                src="/assets/img/testimonials-2.jpg"
+                alt="..."
+              />
+              <h5>Fred S.</h5>
+              <p class="font-weight-light mb-0">
+                "Pay Tonight is amazing. I've been using it for my e-commerce
+                business!"
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+              <img
+                class="img-fluid rounded-circle mb-3"
+                src="/assets/img/testimonials-3.jpg"
+                alt="..."
+              />
+              <h5>Sarah W.</h5>
+              <p class="font-weight-light mb-0">
+                "Thanks so much for making these free resources available to
+                us!"
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="call-to-action text-white text-center" id="signup">
+      <div class="container position-relative">
+        <div class="row justify-content-center">
+          <div class="col-xl-6">
+            <h2 class="mb-4">Ready to get started? Sign up now!</h2>
+            <form action="/auth/register" method="post" class="container">
+              <div class="row">
+                <div class="col">
+                  <div class="form-group>">
+                    <input
+                      class="form-control form-control-lg"
+                      name="username"
+                      type="text"
+                      placeholder="john.doe"
+                      required
+                    />
+                  </div>
+                  <div class="form-group>">
+                    <input
+                      class="form-control form-control-lg"
+                      name="email"
+                      type="email"
+                      placeholder="john.doe@example.com"
+                      required
+                    />
+                  </div>
+                  <div class="form-group>">
+                    <input
+                      class="form-control form-control-lg"
+                      name="organization"
+                      type="text"
+                      placeholder="organization"
+                      required
+                    />
+                  </div>
+                  <div class="form-group>">
+                    <input
+                      class="form-control form-control-lg"
+                      name="password"
+                      type="password"
+                      placeholder="**********"
+                      required
+                    />
+                  </div>
+                <div class="col-auto">
+                  <input
+                    value="Sign Up"
+                    type="submit"
+                    class="btn btn-primary btn-lg"
+                  />
+                </div>
+                <%= locals.signupError || "" %> 
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 h-100 text-center text-lg-start my-auto">
+            <p class="text-muted small mb-4 mb-lg-0">
+              &copy; PayTonight 2021. All Rights Reserved.
+            </p>
+        </div>
+      </div>
+    </footer>
+    
+    <script src="/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
