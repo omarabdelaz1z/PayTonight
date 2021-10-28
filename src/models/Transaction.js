@@ -4,10 +4,10 @@ const connect = require("../utils/db");
 
 // TODO: defeine Transaction schema
 const transactionSchema = new mongoose.Schema({
-  ccv: Number,
-  card_id: Number,
+  ccv: String,
+  cardid: String,
   amount: Number,
-  user_id: mongoose.Schema.Types.ObjectId,
+  merchant_id: mongoose.Schema.Types.ObjectId,
   username: String,
   created_at: String,
   updated_at: String,

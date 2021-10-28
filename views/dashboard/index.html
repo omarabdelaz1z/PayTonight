@@ -54,16 +54,27 @@
       <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z" />
     </symbol>
   </svg>
-  <main>
-    <div class="row" style="height: 100%;">
-      <div class="col-5 col-sm-4 col-md-3 col-lg-2 d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
-        <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-          <svg class="bi me-2" width="40" height="32">
+
+  <header class="text-white p-3 bg-dark border-bottom">
+    <div class="">
+      <div class="d-flex flex-wrap align-items-center justify-content-between">
+        <a href="#" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
             <use xlink:href="#bootstrap"></use>
           </svg>
           <span class="fs-4">PayTonight</span>
         </a>
-        <hr>
+
+        <div class="text-end">
+          <button id="logout" type="button" class="btn btn-warning">Logout</button>
+        </div>
+        
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="row" style="height: 100%;">
+      <div class="col-5 col-sm-4 col-md-3 col-lg-2 d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
         <ul class="nav nav-pills flex-column mb-auto">
           <li class="nav-item">
             <a href="#" class="nav-link active" aria-current="page">
@@ -85,20 +96,14 @@
       </div>
       <div class="col-7 col-sm-8 col-md-9 col-lg-10 p-3">
 
-
         <section id="home" class="">
 
           <div class="card">
             <h5 class="card-header">API Info</h5>
             <div class="card-body">
               <div class="card-text d-flex flex-row">
-                <p>App Key : &nbsp;</p>
-                <p id="app-key">mdhkjasddsa4d654f6djlajdlakdjsds5a</p>
-              </div>
-
-              <div class="card-text d-flex flex-row">
-                <p>App Secret : &nbsp;</p>
-                <p id="app-secret">mdhkjasddsa4d654f6djlajdlakdjsds5a</p>
+                <p>API Key : &nbsp;</p>
+                <p id="api-key">mdhkjasddsa4d654f6djlajdlakdjsds5a</p>
               </div>
             </div>
           </div>
@@ -139,7 +144,7 @@
             <h3 class="card-title m-0">0 EGP</h3>
             <span class="card-text">card</span>
           </div>
-  
+
           <div class="card mt-5">
             <h5 class="card-header">Transactions Summary</h5>
             <div class="card-body text-center">

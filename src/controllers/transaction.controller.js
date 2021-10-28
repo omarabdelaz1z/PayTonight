@@ -9,13 +9,21 @@ const transactionService = new TransactionService();
 
 const createTransaction = async (req, res) => {
   // eslint-disable-next-line camelcase
-  const { ccv, cid, username, user_id, amount } = req.body;
-  const transaction = new Transaction({ ccv, cid, username, user_id, amount, created_at: new Date(), updated_at: new Date() });
+  const { ccv, cardid, username, merchant_id, amount } = req.body;
+  const transaction = new Transaction({
+    ccv,
+    cardid,
+    username,
+    merchant_id,
+    amount,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  });
   const createRes = await transactionService.createTransactionAndSave(transaction);
-  if (createRes) {
-    return res.send({ transaction: createRes })
+  if (!createRes) {
+    return res.status(404).send('merchant_id unauthorized');
   }
-  return res.send.status(404).send('user_id unauthorized');
+  return res.send({ transaction: createRes })
 }
 
 const getTransaction = async (req, res) => {
