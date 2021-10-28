@@ -11,11 +11,7 @@ const { VALIDATE_OPTIONS } = require("../utils/joi/constants");
 const login = (req, res, next) => {
   passport.authenticate("local", (error, user, info) => {
     if (error || !user) {
-      if (error instanceof ServerError) {
-        return res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .render("maintenance");
-      }
+      if (error instanceof ServerError) return res.render("maintenance");
 
       return res.status(StatusCodes.BAD_REQUEST).render("index.ejs", {
         signinError: info?.message || "Invalid username/password",
@@ -40,7 +36,7 @@ const register = async (req, res) => {
     req.body.password = hash;
 
     await createUser(req.body);
-    return res.status(StatusCodes.CREATED).redirect("/login");
+    return res.redirect("/index.ejs");
   } catch (error) {
     if (error instanceof ServerError) return res.render("maintenance");
 
@@ -51,13 +47,13 @@ const register = async (req, res) => {
 
     return res
       .status(StatusCodes.BAD_REQUEST)
-      .render("register", { signupError: error });
+      .render("index.ejs", { signupError: error });
   }
 };
 
 const logout = (req, res) => {
-  res.logOut();
-  res.redirect("/login");
+  req.logOut();
+  res.redirect("/");
 };
 
 module.exports = {
