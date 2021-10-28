@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
 const connect = require("../utils/db");
 
-
-// TODO: defeine Transaction schema
 const transactionSchema = new mongoose.Schema({
   ccv: String,
   cardid: String,
@@ -16,7 +14,6 @@ const transactionSchema = new mongoose.Schema({
 
 const Transaction = mongoose.model("transactions", transactionSchema);
 
-// eslint-disable-next-line import/prefer-default-export
 const createTransaction = async (transaction) => {
   try {
     await connect();
@@ -26,7 +23,6 @@ const createTransaction = async (transaction) => {
   }
 };
 
-// eslint-disable-next-line import/prefer-default-export
 const getTransactionsByUserID = async (id) => {
   try {
     await connect();

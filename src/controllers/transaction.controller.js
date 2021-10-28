@@ -1,11 +1,7 @@
-// TODO: create necessary operations for Transaction
-
 const { Transaction } = require("../models/Transaction");
 const { TransactionService } = require("../Services/TransactionsService");
 
-
 const transactionService = new TransactionService();
-
 
 const createTransaction = async (req, res) => {
   // eslint-disable-next-line camelcase
@@ -17,14 +13,16 @@ const createTransaction = async (req, res) => {
     merchant_id,
     amount,
     created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
+    updated_at: new Date().toISOString(),
   });
-  const createRes = await transactionService.createTransactionAndSave(transaction);
+  const createRes = await transactionService.createTransactionAndSave(
+    transaction
+  );
   if (!createRes) {
-    return res.status(404).send('merchant_id unauthorized');
+    return res.status(404).send("merchant_id unauthorized");
   }
-  return res.send({ transaction: createRes })
-}
+  return res.send({ transaction: createRes });
+};
 
 const getTransaction = async (req, res) => {
   const transactionId = req.params.id;
@@ -42,10 +40,10 @@ const deleteTransaction = async (req, res) => {
   if (!result) {
     return res.status(404).send("not found");
   }
-  return res.send({ message: `transction with id : ${transactionId} is deleted successfully` });
+  return res.send({
+    message: `transction with id : ${transactionId} is deleted successfully`,
+  });
 };
-
-// const updateTransaction = async (req, res) => { };
 
 const getTransactionsByMerchantId = async (req, res) => {
   const id = req.params.user_id;
@@ -54,11 +52,11 @@ const getTransactionsByMerchantId = async (req, res) => {
     return res.status(404).send("not found");
   }
   return res.send({ transactions: result });
-}
+};
 
 module.exports = {
   createTransaction,
   getTransaction,
   deleteTransaction,
-  getTransactionsByMerchantId
+  getTransactionsByMerchantId,
 };
