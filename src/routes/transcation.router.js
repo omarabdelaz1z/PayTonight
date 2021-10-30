@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const {authCall} = require("../middlewares/auth");
 const {
   createTransaction,
   getTransaction,
@@ -9,7 +10,7 @@ const {
 const router = Router();
 
 // TODO: prepare routes
-router.post('/', createTransaction);
+router.post('/',authCall,createTransaction);
 router.route('/:id').get(getTransaction).delete(deleteTransaction);
 router.get('/user/:user_id', getTransactionsByMerchantId);
 

@@ -26,7 +26,7 @@ const createTransaction = async (transaction) => {
 const getTransactionsByUserID = async (id) => {
   try {
     await connect();
-    return(await Transaction.find({ user_id: new mongoose.mongo.ObjectId(id) }));
+    return(await Transaction.find({ merchant_id: new mongoose.mongo.ObjectId(id) }));
   } catch (e) {
     return ( new Error(e) );
   }

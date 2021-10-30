@@ -1,11 +1,11 @@
 require("dotenv").config();
-
 const express = require("express");
+const fetch = require('node-fetch');
 const path = require("path");
 const { StatusCodes } = require("http-status-codes");
 const middleware = require("./src/utils/middleware");
 const authRouter = require("./src/routes/auth.router");
-const devRouter = require("./src/routes/dev.router");
+const userRouter = require("./src/routes/user.router");
 const transactionsRouter = require("./src/routes/transcation.router");
 const { loginRequired, isAlreadyLoggedIn } = require("./src/middlewares/auth");
 
@@ -16,11 +16,19 @@ app.set("view engine", "ejs");
 middleware(app);
 
 app.use("/auth", authRouter);
-app.use("/dev", devRouter);
+app.use("/user", userRouter);
 app.use("/transactions", transactionsRouter);
 
 app.get("/", isAlreadyLoggedIn, (req, res) => res.render("index.ejs"));
-app.get("/dashboard", loginRequired, (req, res) => res.render("dashboard"));
+app.get("/dashboard", loginRequired, async (req, res) => {
+    // eslint-disable-next-line no-underscore-dangle
+    const id = req.user._id.valueOf();
+    const response = await fetch(`http://localhost:${process.env.PORT}/transactions/user/${id}`);
+    const data = await response.json();
+    res.render("dashboard", { apiKey: req.user.apikey,
+                              transactions:data.transactions,
+                              userid:id});
+});
 
 app.get("*", (req, res) => {
   res.status(StatusCodes.NOT_FOUND).render("not-found");

@@ -28,14 +28,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "organization is required"],
     },
-    apps: [
-      {
-        name: String,
-        iv: String,
-        timestamp: String,
-        passphrase: String,
-      },
-    ],
+    apikey: {
+     type:String,
+    }
   },
   options
 );
@@ -72,9 +67,10 @@ const findUserById = async (id) => {
   return User.findById(id, "-__v");
 };
 
-const createApp = async (filter, appDetails) => {
+const createKey = async (userID, appDetails) => {
+  const id = {_id:new mongoose.mongo.ObjectId(userID)};
   await connect();
-  return User.findOneAndUpdate(filter, appDetails, { new: true });
+  return User.findOneAndUpdate(id, appDetails, { new: true });
 };
 
-module.exports = { findUser, createUser, createApp, findUserById };
+module.exports = { findUser, createUser, createKey, findUserById };
