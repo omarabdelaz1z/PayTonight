@@ -5,7 +5,6 @@ const { createUser } = require("../models/User");
 const { ServerError } = require("../utils/error-handler");
 const { prettifyMongooseError } = require("../utils/general");
 const { registerSchema } = require("../utils/joi/schemas");
-const { BAD_REQUEST } = require("../utils/responses");
 const { VALIDATE_OPTIONS } = require("../utils/joi/constants");
 
 const login = (req, res, next) => {
@@ -13,9 +12,8 @@ const login = (req, res, next) => {
     if (error || !user) {
       if (error instanceof ServerError) return res.render("maintenance");
 
-      return res.status(StatusCodes.BAD_REQUEST).render("index.ejs", {
-        signinError: info?.message || "Invalid username/password",
-      });
+      req.flash("signin-error", info?.message || "Invalid username/password");
+      return res.redirect("/");
     }
 
     return req.logIn(user, (err) => {
@@ -28,26 +26,26 @@ const login = (req, res, next) => {
 const register = async (req, res) => {
   try {
     const validation = registerSchema.validate(req.body, VALIDATE_OPTIONS);
+    if (validation.error) {
+      req.flash("signup-error", validation.error.details[0].message);
+      return res.redirect("/");
+    }
 
-    if (validation.error)
-      return BAD_REQUEST(res, validation.error.details[0].message);
-
-    const hash = await bcrypt.hash(req.body.password, 14);
-    req.body.password = hash;
+    const hashedPassword = await bcrypt.hash(req.body.password, 14);
+    req.body.password = hashedPassword;
 
     await createUser(req.body);
-    return res.redirect("/index.ejs");
+    return res.redirect("/");
   } catch (error) {
     if (error instanceof ServerError) return res.render("maintenance");
 
-    if (error?.errors)
-      return res
-        .status(StatusCodes.UNPROCESSABLE_ENTITY)
-        .render("index.ejs", { signupError: prettifyMongooseError(error) });
+    if (error?.errors) {
+      req.flash("signup-error", prettifyMongooseError(error));
+      return res.status(StatusCodes.UNPROCESSABLE_ENTITY).redirect("/");
+    }
 
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .render("index.ejs", { signupError: error });
+    req.flash("signup-error", error);
+    return res.status(StatusCodes.BAD_REQUEST).redirect("/");
   }
 };
 

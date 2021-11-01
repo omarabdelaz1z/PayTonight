@@ -2,6 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const helmet = require("helmet");
 const passport = require("passport");
+const flash = require("connect-flash");
 
 require("./passport");
 
@@ -9,6 +10,7 @@ require("./passport");
 module.exports = (app) => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
+  app.use(flash());
   app.use(helmet());
   app.use(
     session({

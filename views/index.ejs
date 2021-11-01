@@ -40,7 +40,9 @@
               <form action="/auth/login" method="POST" class="container">
                 <div class="row">
                   <div class="col">
+                    <p><%= locals.signinError || "" %> </p>
                     <div class="form-group>">
+                      <label for="username">Username</label>
                       <input
                         class="form-control form-control-lg"
                         name="username"
@@ -50,6 +52,7 @@
                       />
                     </div>
                     <div class="form-group>">
+                      <label for="password">Password</label>
                       <input
                         class="form-control form-control-lg"
                         name="password"
@@ -58,16 +61,14 @@
                         required
                       />
                     </div>
-                  </div>
-                  <div class="col-auto">
-                    <input
-                      type="submit"
-                      value="Sign In"
-                      class="btn btn-primary btn-lg"
-                    />
-                  </div>
-                  <div>
-                    <%= locals.signinError || "" %> 
+                    <br>
+                    <div class="col-auto">
+                      <input
+                        type="submit"
+                        value="Sign In"
+                        class="btn btn-primary btn-lg"
+                      />
+                    </div>
                   </div>
                 </div>
               </form>
@@ -188,7 +189,11 @@
             <form action="/auth/register" method="post" class="container">
               <div class="row">
                 <div class="col">
+                  <p>
+                    <%= locals.signupError || "" %>
+                  </p>
                   <div class="form-group>">
+                    <label for="username">Username</label>
                     <input
                       class="form-control form-control-lg"
                       name="username"
@@ -198,6 +203,7 @@
                     />
                   </div>
                   <div class="form-group>">
+                    <label for="email">Email</label>
                     <input
                       class="form-control form-control-lg"
                       name="email"
@@ -207,6 +213,7 @@
                     />
                   </div>
                   <div class="form-group>">
+                    <label for="Organinzation">Organization</label>
                     <input
                       class="form-control form-control-lg"
                       name="organization"
@@ -216,6 +223,7 @@
                     />
                   </div>
                   <div class="form-group>">
+                    <label for="password">Password</label>
                     <input
                       class="form-control form-control-lg"
                       name="password"
@@ -224,14 +232,14 @@
                       required
                     />
                   </div>
-                <div class="col-auto">
-                  <input
-                    value="Sign Up"
-                    type="submit"
-                    class="btn btn-primary btn-lg"
-                  />
-                </div>
-                <%= locals.signupError || "" %> 
+                  <br>
+                  <div class="col-auto">
+                    <input
+                      value="Sign Up"
+                      type="submit"
+                      class="btn btn-primary btn-lg"
+                    />
+                  </div>
               </div>
             </form>
           </div>
