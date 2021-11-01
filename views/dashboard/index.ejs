@@ -16,13 +16,8 @@
   </head>
 
   <body>
-  <%
-  let sum = 0;
-  transactions.forEach(transaction=>{
-    sum+=transaction.amount;
-  });
-
-  %>
+    <% let sum = 0; locals.transactions.forEach(transaction=>{
+    sum+=transaction.amount; }); %>
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
       <symbol id="home" viewBox="0 0 16 16">
         <path
@@ -136,14 +131,28 @@
               <h5 class="card-header">API Info</h5>
               <div class="card-body">
                 <div class="card-text d-flex flex-row">
-                  <p>API Key : &nbsp;</p>
-                  <%if (apiKey !==null && typeof apiKey !=="undefined"){%>
-                  <p id="api-key"><%= apiKey %></p>
-                  <%}%>
+                  <div id="app-details">
+                    <p id="app-id">
+                      APP ID: &nbsp; <span> <%= locals.appId || "" %> </span>
+                    </p>
+                    <br />
+                    <p id="app-key">
+                      APP Key: &nbsp; <span> <%= locals.appKey || "" %> </span>
+                    </p>
+                  </div>
                 </div>
-                <form style="margin-left:80%; margin-top:-4%;" action="/user/<%=userid%>" method="POST">
-                  <button style="border-radius: 10px;" type="submit"
-                          class="btn-block btn-success">Get API Key</button>
+                <form
+                  style="margin-left: 80%; margin-top: -4%"
+                  action="/user/create-api-key"
+                  method="POST"
+                >
+                  <button
+                    style="border-radius: 10px"
+                    type="submit"
+                    class="btn-block btn-success"
+                  >
+                    Generate API Key
+                  </button>
                 </form>
               </div>
             </div>
@@ -158,7 +167,8 @@
                   <div class="card-body">
                     <h5 class="card-title">Total Transferred</h5>
                     <span id="total" class="card-text" style="font-size: 30px"
-                      ><%=sum%></span>
+                      ><%= sum %></span
+                    >
                     <span class="card-text">EGP</span>
                   </div>
                 </div>
@@ -170,26 +180,25 @@
               <div class="card-body text-center">
                 <% if (transactions.length === 0) {%>
                 <h3 id="no-data-msg2" class="card-text text-secondary">
-                  No Data yet to show
+                  No transactions to show.
                 </h3>
                 <%}else{%>
                 <table class="table">
                   <thead>
-                  <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Amount</th>
-                    <th scope="col">Date</th>
-                  </tr>
+                    <tr>
+                      <th scope="col">ID</th>
+                      <th scope="col">Amount</th>
+                      <th scope="col">Date</th>
+                    </tr>
                   </thead>
                   <tbody>
-                <% transactions.forEach(transaction=>{%>
-                  <tr>
-                    <td><%=transaction._id%></td>
-                    <td><%=transaction.amount%></td>
-                    <td><%=transaction.created_at.split("T")[0]%></td>
-                  </tr>
-                <%});%>
-                <%}%>
+                    <% locals.transactions.forEach(transaction => {%>
+                    <tr>
+                      <td><%=transaction._id%></td>
+                      <td><%=transaction.amount%></td>
+                      <td><%=transaction.created_at.split("T")[0]%></td>
+                    </tr>
+                    <%});}%>
                   </tbody>
                 </table>
               </div>
@@ -206,7 +215,7 @@
               <h5 class="card-header">Transactions Summary</h5>
               <div class="card-body text-center">
                 <h3 id="no-data-msg2" class="card-text text-secondary">
-                  No Data yet to show
+                  No summary to show.
                 </h3>
               </div>
             </div>

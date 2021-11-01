@@ -28,9 +28,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "organization is required"],
     },
-    apikey: {
-     type:String,
-    }
+
+    APP_ID: {
+      type: mongoose.Types.ObjectId,
+      ref: "App",
+    },
   },
   options
 );
@@ -50,6 +52,8 @@ userSchema.path("username").validate(async (value) => {
   return count === 0;
 }, `username is unavailable.`);
 
+// eslint-disable-next-line func-names
+
 const User = mongoose.model("User", userSchema);
 
 const findUser = async (filter) => {
@@ -67,10 +71,9 @@ const findUserById = async (id) => {
   return User.findById(id, "-__v");
 };
 
-const createKey = async (userID, appDetails) => {
-  const id = {_id:new mongoose.mongo.ObjectId(userID)};
+const updateUser = async (filter, update) => {
   await connect();
-  return User.findOneAndUpdate(id, appDetails, { new: true });
+  return User.findOneAndUpdate(filter, update, { new: true }).select("-__v");
 };
 
-module.exports = { findUser, createUser, createKey, findUserById };
+module.exports = { findUser, createUser, findUserById, updateUser };

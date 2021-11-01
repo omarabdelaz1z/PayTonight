@@ -1,29 +1,59 @@
-const generateApiKey = require('generate-api-key');
-const { StatusCodes } = require("http-status-codes");
-const { createKey } = require("../models/User");
-const { BAD_REQUEST, INTERNAL_SERVER_ERROR } = require("../utils/responses");
-const { ServerError } = require("../utils/error-handler");
+const bcrypt = require("bcrypt");
+const fetch = require("node-fetch");
+const { createApp } = require("../models/App");
+const { updateUser } = require("../models/User");
+const { generateApiKey } = require("../utils/general");
 
-
-const registerKey = async (req, res) => {
-  const apiKey = generateApiKey({ method: 'bytes' });
-
+const createApiKey = async (req, res) => {
   try {
-    const {userID} = req?.params;
-    const newApp = {
+    const API_KEY = generateApiKey();
+    const hashedKey = await bcrypt.hash(API_KEY, 14);
+
+    // eslint-disable-next-line no-underscore-dangle
+    const filter = { userId: req.user._id };
+    const update = {
       $set: {
-        apikey:apiKey,
+        APP_KEY: hashedKey,
       },
     };
-    const result = await createKey(userID, newApp);
-    if (result === null || typeof result === "undefined")
-      return BAD_REQUEST(res, "Could not add app");
 
-    return res.status(StatusCodes.CREATED).redirect("/dashboard");
+    const app = await createApp(filter, update);
+    req.user = await updateUser(
+      // eslint-disable-next-line no-underscore-dangle
+      { _id: req.user._id },
+      {
+        $set: {
+          // eslint-disable-next-line no-underscore-dangle
+          APP_ID: app._id,
+        },
+      }
+    );
+
+    req.flash("APP_KEY", API_KEY);
+    // eslint-disable-next-line no-underscore-dangle
+    return res.redirect("/dashboard");
   } catch (error) {
-    if (error instanceof ServerError) return INTERNAL_SERVER_ERROR(res);
-    return res.send(error);
+    console.log(error);
+    return res.render("maintenance");
   }
 };
 
-module.exports = { registerKey };
+const showDashboard = async (req, res) => {
+  // eslint-disable-next-line no-underscore-dangle
+  const id = req.user._id.valueOf();
+
+  // const transactions = await getTransactionsByMerchantId(id);
+  const response = await fetch(
+    `http://localhost:${process.env.PORT}/transactions/user/${id}`
+  );
+
+  const data = await response.json();
+
+  return res.render("dashboard", {
+    appId: req.user.APP_ID,
+    appKey: req.flash("APP_KEY"),
+    transactions: data.transactions,
+  });
+};
+
+module.exports = { createApiKey, showDashboard };

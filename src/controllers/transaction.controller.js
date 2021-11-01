@@ -15,6 +15,7 @@ const createTransaction = async (req, res) => {
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   });
+
   const createRes = await transactionService.createTransactionAndSave(
     transaction
   );

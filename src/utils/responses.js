@@ -13,10 +13,10 @@ module.exports = {
       code: "BAD_REQUST",
     }),
 
-  NOT_AUTHORIZED: (res, error) =>
-    res.status(StatusCodes.NOT_AUTHORIZED).json({
-      error: error || ReasonPhrases.INTERNAL_SERVER_ERROR,
-      code: "NOT_AUTHORIZED",
+  UNAUTHORIZED: (res, error) =>
+    res.status(StatusCodes.UNAUTHORIZED).json({
+      error: error || ReasonPhrases.UNAUTHORIZED,
+      code: "UNAUTHORIZED",
     }),
 
   METHOD_NOT_ALLOWED: (res, error) =>
@@ -31,10 +31,15 @@ module.exports = {
       code: "INTERNAL_SERVER_ERROR",
     }),
 
-  UNSUPPORTED_MEDIA_TYPE: (res, error) => {
+  UNSUPPORTED_MEDIA_TYPE: (res, error) =>
     res.status(StatusCodes.UNSUPPORTED_MEDIA_TYPE).json({
       error: error || ReasonPhrases.UNSUPPORTED_MEDIA_TYPE,
       code: "UNSUPPORTED_MEDIA_TYPE",
-    });
-  },
+    }),
+
+  FORBIDDEN: (res, error) =>
+    res.status(StatusCodes.FORBIDDEN).json({
+      error: error || "You ",
+      code: "FORBIDDEN",
+    }),
 };
