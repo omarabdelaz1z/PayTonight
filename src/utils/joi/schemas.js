@@ -1,3 +1,6 @@
+const Joi = require("joi");
+const { Sanitized, ObjectId } = require("./rules");
+
 const {
   MIN_USERNAME_LENGTH,
   MAX_USERNAME_LENGTH,
@@ -12,27 +15,23 @@ const {
   MIN_MESSAGE,
   MAX_MESSAGE,
 } = require("./messages");
-const { customJoi } = require("./validators");
 
 module.exports = {
-  loginSchema: customJoi.object({
-    username: customJoi
-      .string()
-      .htmlStripped()
+  loginSchema: Joi.object({
+    username: Joi.string()
+      .custom(Sanitized)
       .required()
       .messages({ "any.required": REQUIRED_FIELD_MESSAGE }),
-    password: customJoi
-      .string()
-      .htmlStripped()
+    password: Joi.string()
+      .custom(Sanitized)
       .required()
       .messages({ "any.required": REQUIRED_FIELD_MESSAGE }),
   }),
 
-  registerSchema: customJoi.object({
-    username: customJoi
-      .string()
+  registerScema: Joi.object({
+    username: Joi.string()
       .trim()
-      .htmlStripped()
+      .custom(Sanitized)
       .alphanum()
       .min(MIN_USERNAME_LENGTH)
       .max(MAX_USERNAME_LENGTH)
@@ -42,9 +41,8 @@ module.exports = {
         "string.max": MAX_MESSAGE,
         "any.required": REQUIRED_FIELD_MESSAGE,
       }),
-    password: customJoi
-      .string()
-      .htmlStripped()
+    password: Joi.string()
+      .custom(Sanitized)
       .min(MIN_PASSWORD_LENGTH)
       .max(MAX_PASSWORD_LENGTH)
       .required()
@@ -53,20 +51,13 @@ module.exports = {
         "string.max": MAX_MESSAGE,
         "any.required": REQUIRED_FIELD_MESSAGE,
       }),
-    email: customJoi
-      .string()
-      .trim()
-      .htmlStripped()
-      .email()
-      .required()
-      .messages({
-        "string.min": MIN_MESSAGE,
-        "string.max": MAX_MESSAGE,
-        "any.required": REQUIRED_FIELD_MESSAGE,
-      }),
-    organization: customJoi
-      .string()
-      .htmlStripped()
+    email: Joi.string().trim().custom(Sanitized).email().required().messages({
+      "string.min": MIN_MESSAGE,
+      "string.max": MAX_MESSAGE,
+      "any.required": REQUIRED_FIELD_MESSAGE,
+    }),
+    organization: Joi.string()
+      .custom(Sanitized)
       .min(MIN_ORGANIZATION_LENGTH)
       .max(MAX_ORGANIZATION_LENGTH)
       .required()
@@ -76,4 +67,22 @@ module.exports = {
         "any.required": REQUIRED_FIELD_MESSAGE,
       }),
   }),
+
+  checkoutSchema: Joi.object({
+    merchantId: ObjectId().required(),
+    amount: Joi.number().required(),
+    APP_ID: Joi.string().trim().required(),
+    APP_KEY: Joi.string().trim().required(),
+  }).with("APP_ID", "APP_KEY"),
+
+  paymentSchema: Joi.object({
+    CVV: Joi.number().required(),
+    CARD_NUMBER: Joi.number().required(),
+    merchantId: ObjectId(),
+    amount: Joi.number().required(),
+    APP_ID: Joi.string().trim().required(),
+    APP_KEY: Joi.string().trim().required(),
+  })
+    .with("APP_ID", "APP_KEY")
+    .with("CVV", "CARD_NUMBER"),
 };
