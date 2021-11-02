@@ -9,31 +9,30 @@ const {
 } = require("../models/Transaction");
 const { findUserById } = require("../models/User");
 
-const PAY_TONIGHT_ID = 500;
-
 class TransactionService {
   // eslint-disable-next-line class-methods-use-this
   async sendTransactionToTheBank(transaction) {
     // eslint-disable-next-line camelcase
     const { ccv, cardid, merchant_id, amount } = transaction;
-    const res = await fetch("https://sprintsbank.herokuapp.com/", {
+
+    const response = await fetch(process.env.BANK_ENDPOINT, {
       method: "POST",
       headers: {
+        username: process.env.BANK_USERNAME,
+        password: process.env.BANK_PASSWORD,
         "Content-Type": "application/json",
-        username: "gateway100",
-        password: "Sprints",
       },
       body: JSON.stringify({
         ccv,
         cardid,
         merchant: merchant_id,
         amount,
-        Payment_gateway_ID: PAY_TONIGHT_ID,
+        Payment_gateway_ID: process.env.PAYMENT_GATEWAY_ID,
         timestamp: new Date().toISOString(),
       }),
     });
 
-    return res.json();
+    return response.json();
   }
 
   // eslint-disable-next-line class-methods-use-this

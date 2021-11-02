@@ -1,9 +1,9 @@
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-const { loginSchema } = require("./joi/schemas");
+const { loginSchema } = require("../utils/joi/schemas");
 const { findUser, findUserById } = require("../models/User");
-const { VALIDATE_OPTIONS } = require("./joi/constants");
+const { VALIDATE_OPTIONS } = require("../utils/joi/constants");
 
 const login = async (username, password, done) => {
   try {
