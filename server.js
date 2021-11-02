@@ -1,4 +1,9 @@
 require("dotenv").config();
+<<<<<<< Updated upstream
+=======
+const express = require("express");
+const fetch = require("node-fetch");
+>>>>>>> Stashed changes
 const path = require("path");
 const express = require("express");
 const { StatusCodes } = require("http-status-codes");
@@ -25,10 +30,25 @@ app.use("/user", userRouter);
 app.use("/transactions", transactionsRouter);
 app.use("/api/payment/", paymentRouter);
 
+<<<<<<< Updated upstream
 app.get("/", isAlreadyLoggedIn, (req, res) => {
   res.render("index.ejs", {
     signinError: formatError(req.flash("signin-error")),
     signupError: formatError(req.flash("signup-error")),
+=======
+app.get("/", isAlreadyLoggedIn, (req, res) => res.render("index.ejs"));
+app.get("/dashboard", loginRequired, async (req, res) => {
+  // eslint-disable-next-line no-underscore-dangle
+  const id = req.user._id.valueOf();
+  const response = await fetch(
+    `http://localhost:${process.env.PORT}/transactions/user/${id}`
+  );
+  const data = await response.json();
+  res.render("dashboard", {
+    apiKey: req.user.apikey,
+    transactions: data.transactions,
+    userid: id,
+>>>>>>> Stashed changes
   });
 });
 

@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 const url = require("url");
 const path = require("path");
 const fetch = require("node-fetch");
@@ -85,3 +86,33 @@ module.exports = {
   pay,
   paymentIframe,
 };
+=======
+const { StatusCodes } = require("http-status-codes");
+const { findUser } = require("../models/User");
+
+const getPaymentIframe = async (req, res) => {
+  // eslint-disable-next-line camelcase
+  const { api_token } = req.query;
+
+  // eslint-disable-next-line camelcase
+  if (typeof api_token === "undefined") {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "please provide API token.",
+    });
+  }
+
+  const user = await findUser({ api_token });
+
+  if (!user) {
+    return res.status(StatusCodes.UNAUTHORIZED).json({
+      message: "UNAUTHORIZED ACCESS",
+    });
+  }
+
+  return res.status(StatusCodes.ACCEPTED).send();
+};
+
+const checkout = async (req, res) => {};
+
+module.exports = { getPaymentIframe };
+>>>>>>> Stashed changes
