@@ -24,13 +24,14 @@ const isAuthorized = async (req, res, next) => {
     const APP_KEY = req.headers["x-api-key"];
 
     if (!APP_ID || !APP_KEY)
-      return FORBIDDEN(res, "You must pass API credentials");
+      return FORBIDDEN(res, "Forbidden Access. API Credentials Needed");
 
     const app = await findAppById(APP_ID);
 
     const match = await bcrypt.compare(APP_KEY, app.APP_KEY);
 
     if (!match) return UNAUTHORIZED(res);
+    req.merchantId = app.userId;
 
     return next();
   } catch (error) {
@@ -39,4 +40,8 @@ const isAuthorized = async (req, res, next) => {
   }
 };
 
-module.exports = { loginRequired, isAlreadyLoggedIn, isAuthorized };
+module.exports = {
+  loginRequired,
+  isAlreadyLoggedIn,
+  isAuthorized,
+};
