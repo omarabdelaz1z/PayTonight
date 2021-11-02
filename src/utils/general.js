@@ -1,3 +1,4 @@
+const { readFile } = require("fs/promises");
 const { customAlphabet } = require("nanoid");
 
 const prettifyMongooseError = (error) => {
@@ -29,4 +30,25 @@ const formatError = (error) => {
   return typeof error[0] !== "string" ? Object.values(error[0])[0] : error[0];
 };
 
-module.exports = { prettifyMongooseError, generateApiKey, formatError };
+const prepareFile = async (filepath, placeholders, encoding = "utf8") => {
+  try {
+    let html = await readFile(filepath, { encoding });
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const [placeholder, value] of Object.entries(placeholders)) {
+      html = html.replace(`%${placeholder}%`, value);
+    }
+
+    return html;
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+};
+
+module.exports = {
+  prettifyMongooseError,
+  generateApiKey,
+  formatError,
+  prepareFile,
+};

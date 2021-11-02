@@ -30,7 +30,6 @@ const createApiKey = async (req, res) => {
     );
 
     req.flash("APP_KEY", API_KEY);
-    // eslint-disable-next-line no-underscore-dangle
     return res.redirect("/dashboard");
   } catch (error) {
     console.log(error);

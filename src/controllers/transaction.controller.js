@@ -19,6 +19,7 @@ const createTransaction = async (req, res) => {
   const createRes = await transactionService.createTransactionAndSave(
     transaction
   );
+
   if (!createRes) {
     return res.status(404).send("merchant_id unauthorized");
   }

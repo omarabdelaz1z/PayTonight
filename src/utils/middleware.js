@@ -4,7 +4,7 @@ const helmet = require("helmet");
 const passport = require("passport");
 const flash = require("connect-flash");
 
-require("./passport");
+require("../middlewares/passport");
 
 // Shared middleware for all routes
 module.exports = (app) => {
