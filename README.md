@@ -10,22 +10,31 @@ npm install
 
 ```tree
 |   .env
+|   .eslintignore
 |   .eslintrc.js
 |   .gitignore
+|   babel.config.js
 |   package-lock.json
 |   package.json
 |   README.md
 |   server.js
-|
 +---public
-|   +---about
-|   +---login
-|   \---register
+|   +---assets
+|   +---css
+|   \---js
 |
-\---src
-    +---controllers
-    +---middlewares
-    +---models
-    +---routes
-    \---utils
++---src
+|   +---controllers
+|   +---middlewares
+|   +---models
+|   +---routes
+|   +---Services
+|   \---utils
+|
+\---views
+    |   index.ejs
+    |
+    +---dashboard
+    +---maintenance
+    \---not-found
 ```
