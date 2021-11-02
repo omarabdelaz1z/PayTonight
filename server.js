@@ -1,18 +1,18 @@
 require("dotenv").config();
-const express = require("express");
 const path = require("path");
+const express = require("express");
 const { StatusCodes } = require("http-status-codes");
+
 const middleware = require("./src/utils/middleware");
 const authRouter = require("./src/routes/auth.router");
 const userRouter = require("./src/routes/user.router");
+const paymentRouter = require("./src/routes/payment.router");
 const transactionsRouter = require("./src/routes/transcation.router");
-const {
-  loginRequired,
-  isAlreadyLoggedIn,
-  isAuthorized,
-} = require("./src/middlewares/auth");
-const { showDashboard } = require("./src/controllers/user.controller");
+
+const { loginRequired, isAlreadyLoggedIn } = require("./src/middlewares/auth");
+
 const { formatError } = require("./src/utils/general");
+const { showDashboard } = require("./src/controllers/user.controller");
 
 const app = express();
 app.use(express.static(path.join(__dirname, "public")));
@@ -23,16 +23,13 @@ middleware(app);
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/transactions", transactionsRouter);
+app.use("/api/payment/", paymentRouter);
 
 app.get("/", isAlreadyLoggedIn, (req, res) => {
   res.render("index.ejs", {
     signinError: formatError(req.flash("signin-error")),
     signupError: formatError(req.flash("signup-error")),
   });
-});
-
-app.post("/hello", isAuthorized, (req, res) => {
-  res.json({ username: "A" });
 });
 
 app.get("/dashboard", loginRequired, showDashboard);
