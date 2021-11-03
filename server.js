@@ -7,7 +7,6 @@ const middleware = require("./src/utils/middleware");
 const authRouter = require("./src/routes/auth.router");
 const userRouter = require("./src/routes/user.router");
 const paymentRouter = require("./src/routes/payment.router");
-const transactionsRouter = require("./src/routes/transcation.router");
 
 const { loginRequired, isAlreadyLoggedIn } = require("./src/middlewares/auth");
 
@@ -22,7 +21,6 @@ middleware(app);
 
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
-app.use("/transactions", transactionsRouter);
 app.use("/api/payment/", paymentRouter);
 
 app.get("/", isAlreadyLoggedIn, (req, res) => {

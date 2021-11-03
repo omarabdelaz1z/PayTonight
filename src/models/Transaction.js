@@ -28,11 +28,31 @@ const createTransaction = async (transaction) => {
   return Transaction.create(transaction);
 };
 
-const getTransactionsByUserID = async (id) => {
+const getTransactionsByUserID = async (id, page = 1, limit = 4) => {
   await connect();
-  return Transaction.find({
-    merchant_id: new mongoose.mongo.ObjectId(id),
-  });
+  const userId = new mongoose.mongo.ObjectId(id);
+
+  const filter = { userId };
+
+  const projection = {
+    _id: 1,
+    amount: 1,
+    created_at: 1,
+  };
+
+  const offset = limit * (page - 1);
+  const options = {
+    sort: {
+      _id: -1,
+    },
+    skip: offset,
+    limit,
+  };
+
+  return Promise.all([
+    Transaction.countDocuments(filter).exec(),
+    Transaction.find(filter, projection, options),
+  ]);
 };
 
 const getTransactionByID = async (id) => {
@@ -46,7 +66,6 @@ const deleteTransactionById = async (id) => {
 };
 
 module.exports = {
-  Transaction,
   createTransaction,
   getTransactionByID,
   deleteTransactionById,

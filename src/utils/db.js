@@ -7,7 +7,7 @@ async function connect() {
   if (cachedClient) return cachedClient;
 
   try {
-    const client = await mongoose.connect(process.env.DB_PATH, {
+    const client = await mongoose.connect(process.env.DATABASE_URL, {
       autoIndex: false,
       useNewUrlParser: true,
       useUnifiedTopology: true,

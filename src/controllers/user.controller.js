@@ -1,8 +1,10 @@
 const bcrypt = require("bcrypt");
-const fetch = require("node-fetch");
+const { Types } = require("mongoose");
+
 const { createApp } = require("../models/App");
 const { updateUser } = require("../models/User");
 const { generateApiKey } = require("../utils/general");
+const { getTransactionsByUserID } = require("../models/Transaction");
 
 const createApiKey = async (req, res) => {
   try {
@@ -38,21 +40,32 @@ const createApiKey = async (req, res) => {
 };
 
 const showDashboard = async (req, res) => {
-  // eslint-disable-next-line no-underscore-dangle
-  const id = req.user._id.valueOf();
+  try {
+    // eslint-disable-next-line no-underscore-dangle
+    const id = Types.ObjectId(req.user._id);
+    const [count, transactions] = await getTransactionsByUserID(id);
 
-  // const transactions = await getTransactionsByMerchantId(id);
-  const response = await fetch(
-    `http://localhost:${process.env.PORT}/transactions/user/${id}`
-  );
+    console.log(count, transactions);
 
-  const data = await response.json();
+    const revenue = transactions.reduce(
+      (total, transaction) => total + transaction.amount,
+      0
+    );
 
-  return res.render("dashboard", {
-    appId: req.user.APP_ID,
-    appKey: req.flash("APP_KEY"),
-    transactions: data.transactions,
-  });
+    return res.render("dashboard", {
+      appId: req.user.APP_ID,
+      appKey: req.flash("APP_KEY"),
+      transactions,
+      revenue: Math.round((revenue + Number.EPSILON) * 100) / 100,
+    });
+  } catch (error) {
+    return res.render("dashboard", {
+      appId: req.user.APP_ID,
+      appKey: req.flash("APP_KEY"),
+      transactions: undefined,
+      revenue: 0,
+    });
+  }
 };
 
 module.exports = { createApiKey, showDashboard };
