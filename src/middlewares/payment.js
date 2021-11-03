@@ -3,15 +3,15 @@ const jwt = require("jsonwebtoken");
 const { findAppById } = require("../models/App");
 const { paymentSchema, checkoutSchema } = require("../utils/joi/schemas");
 const { VALIDATE_OPTIONS } = require("../utils/joi/constants");
-const { UNAUTHORIZED, FORBIDDEN } = require("../utils/responses");
+const { UNAUTHORIZED, FORBIDDEN, BAD_REQUEST } = require("../utils/responses");
 
 const validateCheckout = async (req, res, next) => {
   const { APP_ID } = req.body;
   const APP_KEY = req.headers["x-api-key"];
 
   const payload = {
-    merchantId: req.merchantId,
-    amount: req.body.amount,
+    merchantId: req.merchantId.toString(),
+    amount: req.body.amount * 1.01,
     APP_ID,
     APP_KEY,
   };
@@ -19,8 +19,8 @@ const validateCheckout = async (req, res, next) => {
   const validation = checkoutSchema.validate(payload, VALIDATE_OPTIONS);
 
   if (validation?.error) {
-    req.flash("checkout-error", validation.error.details[0].message);
-    // return res.redirect(redirectURI);
+    console.log("validation schema error");
+    return BAD_REQUEST(res, validation.error.details[0].message);
   }
 
   req.flash("payload", payload);
@@ -36,15 +36,13 @@ const validatePayment = (req, res, next) => {
   const validation = paymentSchema.validate(payload, VALIDATE_OPTIONS);
 
   if (validation?.error) {
-    req.flash("checkout-error", validation.error.details[0].message);
-    // return res.status();
+    return BAD_REQUEST(res, validation.error.details[0].message);
   }
 
   return next();
 };
 
 const validateJwt = async (req, res, next) => {
-  console.log(req.query);
   const { token } = req.query;
 
   return jwt.verify(

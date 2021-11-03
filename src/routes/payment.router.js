@@ -1,5 +1,4 @@
 const { Router } = require("express");
-<<<<<<< Updated upstream
 const { isAuthorized } = require("../middlewares/auth");
 const {
   validateJwt,
@@ -11,20 +10,16 @@ const {
   checkout,
   pay,
   paymentIframe,
+  success,
+  failure,
 } = require("../controllers/payment.controller");
 
 const router = Router();
 
 router.post("/checkout", isAuthorized, validateCheckout, checkout);
-router.get("/iframe", validateJwt, paymentIframe);
 router.post("/pay", validateJwt, validatePayment, pay);
-=======
-const { getPaymentIframe } = require("../controllers/payment.controller");
-
-const router = Router();
-
-router.get("/iframe", getPaymentIframe);
-router.post("/checkout");
->>>>>>> Stashed changes
+router.get("/iframe", validateJwt, paymentIframe);
+router.get("/pay/success", success);
+router.get("/pay/fail", failure);
 
 module.exports = router;

@@ -10,7 +10,7 @@ module.exports = {
   BAD_REQUEST: (res, error) =>
     res.status(StatusCodes.BAD_REQUEST).json({
       error: error || ReasonPhrases.BAD_REQUEST,
-      code: "BAD_REQUST",
+      code: "BAD_REQUEST",
     }),
 
   UNAUTHORIZED: (res, error) =>
@@ -39,7 +39,7 @@ module.exports = {
 
   FORBIDDEN: (res, error) =>
     res.status(StatusCodes.FORBIDDEN).json({
-      error: error || "You ",
+      error: error || "You are not authorized to access the content.",
       code: "FORBIDDEN",
     }),
 };

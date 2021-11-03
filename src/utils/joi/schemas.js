@@ -14,6 +14,7 @@ const {
   REQUIRED_FIELD_MESSAGE,
   MIN_MESSAGE,
   MAX_MESSAGE,
+  POSITIVE_MESSAGE,
 } = require("./messages");
 
 module.exports = {
@@ -70,19 +71,20 @@ module.exports = {
 
   checkoutSchema: Joi.object({
     merchantId: ObjectId().required(),
-    amount: Joi.number().required(),
+    amount: Joi.number().positive().message(POSITIVE_MESSAGE).required(),
     APP_ID: Joi.string().trim().required(),
     APP_KEY: Joi.string().trim().required(),
   }).with("APP_ID", "APP_KEY"),
 
   paymentSchema: Joi.object({
-    CVV: Joi.number().required(),
-    CARD_NUMBER: Joi.number().required(),
+    cvv: Joi.number().integer().required(),
+    card_number: Joi.number().integer().required(),
     merchantId: ObjectId(),
-    amount: Joi.number().required(),
+    amount: Joi.number().positive().message(POSITIVE_MESSAGE).required(),
     APP_ID: Joi.string().trim().required(),
     APP_KEY: Joi.string().trim().required(),
+    iat: Joi.optional(),
   })
     .with("APP_ID", "APP_KEY")
-    .with("CVV", "CARD_NUMBER"),
+    .with("cvv", "card_number"),
 };
