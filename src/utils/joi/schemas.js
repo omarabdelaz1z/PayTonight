@@ -29,7 +29,7 @@ module.exports = {
       .messages({ "any.required": REQUIRED_FIELD_MESSAGE }),
   }),
 
-  registerScema: Joi.object({
+  registerSchema: Joi.object({
     username: Joi.string()
       .trim()
       .custom(Sanitized)
