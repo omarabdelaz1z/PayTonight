@@ -1,16 +1,14 @@
 const { Router } = require("express");
-const { isAuthorized } = require("../middlewares/auth");
+const { loginRequired } = require("../middlewares/auth");
 const {
-  createTransaction,
   getTransaction,
-  getTransactionsByMerchantId,
-  deleteTransaction,
+  getUserTransactions,
 } = require("../controllers/transaction.controller");
 
 const router = Router();
+router.use(loginRequired);
 
-router.post("/", isAuthorized, createTransaction);
-router.route("/:id").get(getTransaction).delete(deleteTransaction);
-router.get("/user/:user_id", getTransactionsByMerchantId);
+router.get("/", getUserTransactions);
+router.get("/:id").get(getTransaction);
 
 module.exports = router;

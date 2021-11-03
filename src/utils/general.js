@@ -32,14 +32,16 @@ const formatError = (error) => {
 
 const prepareFile = async (filepath, placeholders, encoding = "utf8") => {
   try {
-    let html = await readFile(filepath, { encoding });
+    let file = await readFile(filepath, { encoding });
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (const [placeholder, value] of Object.entries(placeholders)) {
-      html = html.replace(`%${placeholder}%`, value);
+    if (placeholders) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const [placeholder, value] of Object.entries(placeholders)) {
+        file = file.replace(`%${placeholder}%`, value);
+      }
     }
 
-    return html;
+    return file;
   } catch (err) {
     console.log(err);
     return err;

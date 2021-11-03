@@ -16,8 +16,6 @@
   </head>
 
   <body>
-    <% let sum = 0; locals.transactions.forEach(transaction=>{
-    sum+=transaction.amount; }); %>
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
       <symbol id="home" viewBox="0 0 16 16">
         <path
@@ -167,7 +165,7 @@
                   <div class="card-body">
                     <h5 class="card-title">Total Transferred</h5>
                     <span id="total" class="card-text" style="font-size: 30px"
-                      ><%= sum %></span
+                      ><%= locals.revenue %></span
                     >
                     <span class="card-text">EGP</span>
                   </div>
@@ -178,7 +176,7 @@
             <div class="card mt-5">
               <h5 class="card-header">Recent Transactions</h5>
               <div class="card-body text-center">
-                <% if (transactions.length === 0) {%>
+                <% if (locals.transactions.length === 0) {%>
                 <h3 id="no-data-msg2" class="card-text text-secondary">
                   No transactions to show.
                 </h3>
@@ -196,7 +194,9 @@
                     <tr>
                       <td><%=transaction._id%></td>
                       <td><%=transaction.amount%></td>
-                      <td><%=transaction.created_at.split("T")[0]%></td>
+                      <td>
+                        <%=new Date(transaction.created_at).toGMTString()%>
+                      </td>
                     </tr>
                     <%});}%>
                   </tbody>

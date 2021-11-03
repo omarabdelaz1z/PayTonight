@@ -1,64 +1,52 @@
-const { Transaction } = require("../models/Transaction");
-const { TransactionService } = require("../Services/TransactionsService");
+const { Types } = require("mongoose");
+const { StatusCodes } = require("http-status-codes");
+const {
+  getTransactionByID,
+  getTransactionsByUserID,
+} = require("../models/Transaction");
 
-const transactionService = new TransactionService();
-
-const createTransaction = async (req, res) => {
-  // eslint-disable-next-line camelcase
-  const { ccv, cardid, username, merchant_id, amount } = req.body;
-  const transaction = new Transaction({
-    ccv,
-    cardid,
-    username,
-    merchant_id,
-    amount,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  });
-
-  const createRes = await transactionService.createTransactionAndSave(
-    transaction
-  );
-
-  if (!createRes) {
-    return res.status(404).send("merchant_id unauthorized");
-  }
-  return res.send({ transaction: createRes });
-};
+const { ServerError } = require("../utils/error-handler");
+const { INTERNAL_SERVER_ERROR, NOT_FOUND } = require("../utils/responses");
 
 const getTransaction = async (req, res) => {
-  const transactionId = req.params.id;
-  const result = await transactionService.getById(transactionId);
-  if (!result) {
-    return res.status(404).send("not found");
+  try {
+    const transactionId = Types.ObjectId(req.params.id);
+    const transaction = await getTransactionByID(transactionId);
+
+    if (!transaction)
+      return NOT_FOUND(res, { message: "Transaction is not found" });
+
+    return res.status(StatusCodes.OK).json(transaction);
+  } catch (error) {
+    console.log(error);
+    if (error instanceof ServerError) {
+      return INTERNAL_SERVER_ERROR(res);
+    }
+    return res.status(StatusCodes.BAD_REQUEST).send(error);
   }
-  return res.send({ transaction: result });
 };
 
-const deleteTransaction = async (req, res) => {
-  const transactionId = req.params.id;
-  console.log(transactionId);
-  const result = await transactionService.deleteById(transactionId);
-  if (!result) {
-    return res.status(404).send("not found");
-  }
-  return res.send({
-    message: `transction with id : ${transactionId} is deleted successfully`,
-  });
-};
+const getUserTransactions = async (req, res) => {
+  try {
+    // eslint-disable-next-line no-underscore-dangle
+    const id = Types.ObjectId(req.user._id);
+    const transactions = await getTransactionsByUserID(id);
 
-const getTransactionsByMerchantId = async (req, res) => {
-  const id = req.params.user_id;
-  const result = await transactionService.getByUserId(id);
-  if (!result) {
-    return res.status(404).send("not found");
+    if (!transactions || transactions.length === 0) {
+      return NOT_FOUND(res, { message: "No transactions with that user id" });
+    }
+
+    return res.status(StatusCodes.OK).json(transactions);
+  } catch (error) {
+    console.log(error);
+    if (error instanceof ServerError) {
+      return INTERNAL_SERVER_ERROR(res);
+    }
+    return res.status(StatusCodes.BAD_REQUEST).send(error);
   }
-  return res.send({ transactions: result });
 };
 
 module.exports = {
-  createTransaction,
   getTransaction,
-  deleteTransaction,
-  getTransactionsByMerchantId,
+  getUserTransactions,
 };
