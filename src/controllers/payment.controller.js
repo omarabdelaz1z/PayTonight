@@ -85,11 +85,7 @@ const paymentIframe = async (req, res) => {
   });
 
   res.setHeader("content-type", ["text/html"]);
-  return res
-    .status(StatusCodes.CREATED)
-    .json({
-      URL: `${process.env.PAYMENT_ENDPOINT}/api/payment/iframe?token=${req.token}`,
-    });
+  return res.send(iframe);
 };
 
 const success = async (req, res) => {
