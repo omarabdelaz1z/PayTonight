@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const connect = require("../utils/db");
 
 const transactionSchema = new mongoose.Schema({
-  merchant_id: {
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: "User",
@@ -21,7 +21,7 @@ const transactionSchema = new mongoose.Schema({
   },
 });
 
-const Transaction = mongoose.model("transactions", transactionSchema);
+const Transaction = mongoose.model("Transaction", transactionSchema);
 
 const createTransaction = async (transaction) => {
   await connect();

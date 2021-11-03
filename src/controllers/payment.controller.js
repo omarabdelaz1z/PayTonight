@@ -1,11 +1,14 @@
-<<<<<<< Updated upstream
 const url = require("url");
 const path = require("path");
 const fetch = require("node-fetch");
 const jwt = require("jsonwebtoken");
+const { Types } = require("mongoose");
 const { StatusCodes } = require("http-status-codes");
 const { prepareFile } = require("../utils/general");
-const { createTransaction } = require("./transaction.controller");
+const { createTransaction } = require("../models/Transaction");
+const { prettifyMongooseError } = require("../utils/general");
+const { ServerError } = require("../utils/error-handler");
+const { BAD_REQUEST, INTERNAL_SERVER_ERROR } = require("../utils/responses");
 
 const transferPayment = async (body) => {
   const response = await fetch(process.env.BANK_ENDPOINT, {
@@ -42,38 +45,42 @@ const pay = async (req, res) => {
       ccv: req.body.cvv,
       cardid: req.body.card_number,
       merchant: req.payload.merchantId,
-      amount: req.payload.amount * 1.01,
+      amount: Number(req.payload.amount) * 1.01,
       Payment_gateway_ID: process.env.PAYMENT_GATEWAY_ID,
       timestamp: new Date().toISOString(),
     };
 
     const networkResponse = await transferPayment(payment);
 
-    console.log(networkResponse);
+    if (!networkResponse.accepted) {
+      req.flash("error", networkResponse.error);
+      return res.redirect("/api/payment/pay/fail");
+    }
 
-    if (!networkResponse.accepted)
-      return res.status(StatusCodes.BAD_REQUEST).json(networkResponse);
-
-    const created = await createTransaction({
-      merchantId: req.payload.merchantId,
-      amount: req.payload.amount * 1.01,
+    await createTransaction({
+      userId: Types.ObjectId(req.payload.merchantId),
+      amount: Number(req.payload.amount) * 1.01,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     });
 
-    return res.status(StatusCodes.CREATED).json(created);
+    return res.redirect("/api/payment/pay/success");
   } catch (error) {
-    console.log(error);
+    if (error instanceof ServerError)
+      return INTERNAL_SERVER_ERROR(res, {
+        message: "Service is currently down",
+      });
+
+    if (error?.errors) return BAD_REQUEST(res, prettifyMongooseError(error));
     return res.status(StatusCodes.BAD_REQUEST).send(error);
   }
 };
 
 const paymentIframe = async (req, res) => {
-  console.log(req.payload);
   const iframePath = path.join(__dirname, "/payment-iframe/index.html");
 
   const iframe = await prepareFile(iframePath, {
-    amount: req.payload.amount,
+    amount: Number(req.payload.amount) * 1.01,
     token: req.token,
   });
 
@@ -81,38 +88,32 @@ const paymentIframe = async (req, res) => {
   return res.send(iframe);
 };
 
+const success = async (req, res) => {
+  const pagePath = path.join(__dirname, "/payment-iframe/success.html");
+
+  const page = await prepareFile(pagePath);
+
+  res.setHeader("content-type", ["text/html"]);
+  return res.send(page);
+};
+
+const failure = async (req, res) => {
+  const reason = req.flash("error");
+  console.log(reason);
+  const pagePath = path.join(__dirname, "/payment-iframe/fail.html");
+
+  const page = await prepareFile(pagePath, {
+    reason,
+  });
+
+  res.setHeader("content-type", ["text/html"]);
+  return res.send(page);
+};
+
 module.exports = {
   checkout,
   pay,
   paymentIframe,
+  success,
+  failure,
 };
-=======
-const { StatusCodes } = require("http-status-codes");
-const { findUser } = require("../models/User");
-
-const getPaymentIframe = async (req, res) => {
-  // eslint-disable-next-line camelcase
-  const { api_token } = req.query;
-
-  // eslint-disable-next-line camelcase
-  if (typeof api_token === "undefined") {
-    return res.status(StatusCodes.BAD_REQUEST).json({
-      message: "please provide API token.",
-    });
-  }
-
-  const user = await findUser({ api_token });
-
-  if (!user) {
-    return res.status(StatusCodes.UNAUTHORIZED).json({
-      message: "UNAUTHORIZED ACCESS",
-    });
-  }
-
-  return res.status(StatusCodes.ACCEPTED).send();
-};
-
-const checkout = async (req, res) => {};
-
-module.exports = { getPaymentIframe };
->>>>>>> Stashed changes
