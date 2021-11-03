@@ -51,6 +51,7 @@ const register = async (req, res) => {
 
 const logout = (req, res) => {
   req.logOut();
+  req.session.destroy();
   res.redirect("/");
 };
 

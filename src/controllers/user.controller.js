@@ -43,9 +43,7 @@ const showDashboard = async (req, res) => {
   try {
     // eslint-disable-next-line no-underscore-dangle
     const id = Types.ObjectId(req.user._id);
-    const [count, transactions] = await getTransactionsByUserID(id);
-
-    console.log(count, transactions);
+    const [, transactions] = await getTransactionsByUserID(id);
 
     const revenue = transactions.reduce(
       (total, transaction) => total + transaction.amount,

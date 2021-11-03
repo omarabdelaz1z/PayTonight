@@ -19,7 +19,6 @@ const validateCheckout = async (req, res, next) => {
   const validation = checkoutSchema.validate(payload, VALIDATE_OPTIONS);
 
   if (validation?.error) {
-    console.log("validation schema error");
     return BAD_REQUEST(res, validation.error.details[0].message);
   }
 

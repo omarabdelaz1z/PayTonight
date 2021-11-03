@@ -1,8 +1,9 @@
 const express = require("express");
-const session = require("express-session");
 const helmet = require("helmet");
 const passport = require("passport");
 const flash = require("connect-flash");
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
 
 require("../middlewares/passport");
 
@@ -17,10 +18,19 @@ module.exports = (app) => {
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
+      store: MongoStore.create({
+        mongoUrl: process.env.DATABASE_URL,
+        crypto: {
+          secret: "squirrel",
+        },
+        ttl: 60 * 60,
+        autoRemove: "interval",
+        autoRemoveInterval: 10, // In minutes. Default
+      }),
       cookie: {
-        maxAge: 1000 * 60 * 60 * 24,
         httpOnly: true,
       },
+      unset: "destroy",
     })
   );
   app.use(passport.initialize());
