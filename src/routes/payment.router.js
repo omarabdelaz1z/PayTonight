@@ -13,11 +13,18 @@ const {
   success,
   failure,
 } = require("../controllers/payment.controller");
+const { requireJsonContent } = require("../middlewares/general");
 
 const router = Router();
 
-router.post("/checkout", isAuthorized, validateCheckout, checkout);
-router.post("/pay", validateJwt, validatePayment, pay);
+router.post(
+  "/checkout",
+  requireJsonContent,
+  isAuthorized,
+  validateCheckout,
+  checkout
+);
+router.post("/pay", requireJsonContent, validateJwt, validatePayment, pay);
 router.get("/iframe", validateJwt, paymentIframe);
 router.get("/pay/success", success);
 router.get("/pay/fail", failure);

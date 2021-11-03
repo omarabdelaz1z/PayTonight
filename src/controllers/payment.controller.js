@@ -85,7 +85,11 @@ const paymentIframe = async (req, res) => {
   });
 
   res.setHeader("content-type", ["text/html"]);
-  return res.send(iframe);
+  return res
+    .status(StatusCodes.CREATED)
+    .json({
+      URL: `${process.env.PAYMENT_ENDPOINT}/api/payment/iframe?token=${req.token}`,
+    });
 };
 
 const success = async (req, res) => {
@@ -99,7 +103,6 @@ const success = async (req, res) => {
 
 const failure = async (req, res) => {
   const reason = req.flash("error");
-  console.log(reason);
   const pagePath = path.join(__dirname, "/payment-iframe/fail.html");
 
   const page = await prepareFile(pagePath, {
