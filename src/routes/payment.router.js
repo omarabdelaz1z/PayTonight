@@ -24,7 +24,7 @@ router.post(
   validateCheckout,
   checkout
 );
-router.post("/pay", requireJsonContent, validateJwt, validatePayment, pay);
+router.post("/pay", validateJwt, validatePayment, pay);
 router.get("/iframe", validateJwt, paymentIframe);
 router.get("/pay/success", success);
 router.get("/pay/fail", failure);
