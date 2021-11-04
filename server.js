@@ -1,3 +1,4 @@
+const dotenv = require('dotenv');
 const path = require("path");
 const express = require("express");
 const { StatusCodes } = require("http-status-codes");
@@ -6,12 +7,14 @@ const middleware = require("./src/utils/middleware");
 const authRouter = require("./src/routes/auth.router");
 const userRouter = require("./src/routes/user.router");
 const paymentRouter = require("./src/routes/payment.router");
-
+const transactionsRouter = require('./src/routes/transcation.router');
 const { loginRequired, isAlreadyLoggedIn } = require("./src/middlewares/auth");
 
 const { formatError } = require("./src/utils/general");
 const { showDashboard } = require("./src/controllers/user.controller");
 
+
+dotenv.config();
 const app = express();
 app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
@@ -21,7 +24,7 @@ middleware(app);
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/api/payment/", paymentRouter);
-
+app.use('/transactions', transactionsRouter)
 app.get("/", isAlreadyLoggedIn, (req, res) => {
   res.render("index.ejs", {
     signinError: formatError(req.flash("signin-error")),
