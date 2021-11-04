@@ -19,7 +19,7 @@
     APP_ID:"<Your APP_ID>"
     amount: <Amount charged>
   ```
-  4. The page will be redirected to /api/payment/iframe?token=token with the following iframe
+  4. The page will be redirected to `/api/payment/iframe?token=token` with the following iframe
   ![payment frame](public/assets/img/iframe.png)
 
   5. Enter payment card credentials
