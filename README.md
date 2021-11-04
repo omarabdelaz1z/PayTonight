@@ -9,17 +9,17 @@
   2. Login and generate API credentials, make sure to save APP_KEY or you will need to generate another one (notice that APP ID doesn't change so)
 
   3. Make a POST Call to /api/payment/checkout with the following headers:
-  ```
+  ```bash
     Content-Type: 'application/json',
     x-api-key: "<your API key>"
   ```
   and the following body:
 
-  ```
+  ```bash
     APP_ID:"<Your APP_ID>"
     amount: <Amount charged>
   ```
-  4. A payment frame should return
+  4. The page will be redirected to /api/payment/iframe?token=token with the following iframe
   ![payment frame](public/assets/img/iframe.png)
 
   5. Enter payment card credentials
@@ -27,7 +27,7 @@
   6. A response should return if payment credentials were accepted by bank.
 
 Example API request would be
-```
+```js
 const PAYMENT_ENDPOINT = "https://paytonight.herokuapp.com/api/payment/checkout";
 
 const body = JSON.stringify({
@@ -58,7 +58,7 @@ fetch(PAYMENT_ENDPOINT, options)
 ### You could also use API calls to register or login
 1. Make a POST request to /auth/register
 with the following body:
-```
+```bash
 username:"<username>"
 password:"<password>"
 email:"<email>"
@@ -69,7 +69,7 @@ organization:"<organization>"
 2. Make a POST request to /auth/login 
 with the following body:
 
-```
+```bash
 username:"<username>"
 password:"<password>"
 ```
