@@ -18,11 +18,6 @@ transactionsBtn.addEventListener('click', (e) => {
     transactionsSection.classList.remove('d-none');
 });
 
-function parseISOString(s) {
-    var b = s.split(/\D+/);
-    return new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]));
-}
-
 function formatDate(isoDateString) {
     let dateAndTime = new Date(isoDateString);
     console.log(dateAndTime)
@@ -34,7 +29,7 @@ function formatDate(isoDateString) {
 
 async function fetchTransctions() {
     const id = document.getElementById('userId').dataset.id;
-    const res = await fetch(`http://localhost:5000/transactions/user/${id}`);
+    const res = await fetch(`https://paytonight.herokuapp.com/transactions/user/${id}`);
     console.log(id);
     if (!res.ok) {
         console.log('error');
