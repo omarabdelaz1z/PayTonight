@@ -41,6 +41,9 @@ const createApiKey = async (req, res) => {
 
 const showDashboard = async (req, res) => {
   try {
+    console.log(req.session.id);
+    console.log(req.session.id);
+    console.log(req.session.id);
     // eslint-disable-next-line no-underscore-dangle
     const id = Types.ObjectId(req.user._id);
     const [, transactions] = await getTransactionsByUserID(id, 1, 4);
@@ -51,7 +54,7 @@ const showDashboard = async (req, res) => {
     );
 
     return res.render("dashboard", {
-    // eslint-disable-next-line no-underscore-dangle
+      // eslint-disable-next-line no-underscore-dangle
       userId: id.toString(),
       appId: req.user.APP_ID,
       appKey: req.flash("APP_KEY"),

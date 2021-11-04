@@ -50,8 +50,11 @@ const register = async (req, res) => {
 };
 
 const logout = (req, res) => {
+  console.log(req.session.id);
   req.logOut();
-  req.session.destroy();
+  req.session.destroy((err) => {
+    console.log(err);
+  });
   res.redirect("/");
 };
 
