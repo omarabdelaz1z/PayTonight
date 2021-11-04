@@ -1,16 +1,14 @@
 # PayTonight: Payment Gateway: 
 
-It is now available at: https://paytonight.herokuapp.com/
-
 ## Documentation
 
 ## How to use
 
   1. Register in API through Portal https://paytonight.herokuapp.com/
 
-  2. Login and Generate API Key for app
+  2. Login and generate API credentials, make sure to save APP_KEY or you will need to generate another one (notice that APP ID doesn't change so)
 
-  3. Make a POST Call to https://paytonight.herokuapp.com/api/payment/checkout with the following headers:
+  3. Make a POST Call to /api/payment/checkout with the following headers:
   ```
     Content-Type: 'application/json',
     x-api-key: "<your API key>"
@@ -18,23 +16,80 @@ It is now available at: https://paytonight.herokuapp.com/
   and the following body:
 
   ```
-    APP_ID:"<Your APP_ID>",
+    APP_ID:"<Your APP_ID>"
     amount: <Amount charged>
   ```
   4. A payment frame should return
-  ![payment frame](https://drscdn.500px.org/photo/1039530682/m%3D900/v2?sig=c5e32389f509bc51ca74c3f07410a6261ef1d27dd9dafb87d97cc32fb00b1b81)
+  ![payment frame](public/assets/img/iframe.png)
 
   5. Enter payment card credentials
 
   6. A response should return if payment credentials were accepted by bank.
 
+Example API request would be
+```
+const PAYMENT_ENDPOINT = "https://paytonight.herokuapp.com/api/payment/checkout";
+
+const body = JSON.stringify({
+  APP_ID: "APP_ID",
+  amount: amount,
+});
+
+const options = {
+  method: "POST",
+  headers: {
+    "x-api-key": "APP_KEY",
+    "Content-Type": "application/json",
+  },
+  body,
+};
+
+fetch(PAYMENT_ENDPOINT, options)
+  .then((response) => {
+    if (response.redirected) {
+      window.location.href = response.url;
+    }
+  })
+  .catch(function (err) {
+    console.info(err + " url: " + url);
+  });
+```
+
+### You could also use API calls to register or login
+1. Make a POST request to /auth/register
+with the following body:
+```
+username:"<username>"
+password:"<password>"
+email:"<email>"
+organization:"<organization>"
+```
+##### please note that all fields are required. Username & password lengths should be >=6
+
+2. Make a POST request to /auth/login 
+with the following body:
+
+```
+username:"<username>"
+password:"<password>"
+```
+##### After successful login you should be able to view the dashboard and make the call to the payment gateway
 ## How to install
   1. create .env file with the following attributes:
  ```bash
-  DB_PATH= # Path to mongoDB 
+  DATABASE_URL= # Path to mongoDB 
   PORT= # Port which the app runs
-  SESSION_SECRET= # secret key for session.
+  SESSION_SECRET= # Secret key for session.
+  JWT_ACCESS_TOKEN_SECRET= # json webtoken secret
+  JWT_REFRESH_TOKEN_SECRET=# 
+  PAYMENT_GATEWAY_ID= # An ID supplied by banking app
+  BANK_ENDPOINT= # A banking endpoint used for transactions
+  BANK_USERNAME= # A username supplied by banking app
+  BANK_PASSWORD= # A password supplied by banking app
+  PAYMENT_ENDPOINT= # This app's deployment url 
   ```
 2. run  ```npm install ```
 
 3. run ``` node server.js``` 
+## Development
+- run ```npm run dev```
