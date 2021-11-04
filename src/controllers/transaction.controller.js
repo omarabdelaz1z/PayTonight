@@ -6,7 +6,7 @@ const {
 } = require("../models/Transaction");
 
 const { ServerError } = require("../utils/error-handler");
-const { INTERNAL_SERVER_ERROR, NOT_FOUND } = require("../utils/responses");
+const { INTERNAL_SERVER_ERROR, NOT_FOUND, FORBIDDEN } = require("../utils/responses");
 
 const getTransaction = async (req, res) => {
   try {
@@ -28,6 +28,10 @@ const getTransaction = async (req, res) => {
 
 const getUserTransactions = async (req, res) => {
   try {
+    // eslint-disable-next-line no-underscore-dangle
+    if(req.params.id !== (req.user._id).toString()) {
+      return FORBIDDEN(res)
+    }
     // eslint-disable-next-line no-underscore-dangle
     const id = Types.ObjectId(req.user._id);
     const transactions = await getTransactionsByUserID(id);

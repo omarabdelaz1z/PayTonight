@@ -28,7 +28,7 @@ const createTransaction = async (transaction) => {
   return Transaction.create(transaction);
 };
 
-const getTransactionsByUserID = async (id, page = 1, limit = 4) => {
+const getTransactionsByUserID = async (id, page = 0, limit = 0) => {
   await connect();
   const userId = new mongoose.mongo.ObjectId(id);
 
