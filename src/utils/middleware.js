@@ -1,5 +1,6 @@
 const express = require("express");
 const helmet = require("helmet");
+const cors = require("cors");
 const passport = require("passport");
 const flash = require("connect-flash");
 const session = require("express-session");
@@ -18,21 +19,22 @@ module.exports = (app) => {
     })
   );
   app.use(
+    cors({
+      origin: "*",
+    })
+  );
+  app.use(
     session({
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
       store: MongoStore.create({
         mongoUrl: process.env.DATABASE_URL,
-        crypto: {
-          secret: "squirrel",
-        },
-        ttl: 60 * 60,
-        autoRemove: "interval",
-        autoRemoveInterval: 10, // In minutes. Default
+        ttl: 30 * 60,
       }),
       cookie: {
         httpOnly: true,
+        maxAge: 30 * 60,
       },
       unset: "destroy",
     })

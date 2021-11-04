@@ -1,3 +1,4 @@
+const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const connect = require("../utils/db");
 
@@ -53,6 +54,12 @@ userSchema.path("username").validate(async (value) => {
 }, `username is unavailable.`);
 
 // eslint-disable-next-line func-names
+// eslint-disable-next-line func-names
+userSchema.pre("save", async function ifPasswordChanged(next) {
+  if (this.isModified("password"))
+    this.password = await bcrypt.hash(this.password, 14);
+  return next();
+});
 
 const User = mongoose.model("User", userSchema);
 
